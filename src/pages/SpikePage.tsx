@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, Cpu, BookOpen, Wrench, CheckCircle2, Cog, Bluetooth, Gauge, Zap } from "lucide-react";
+import { ArrowLeft, Package, Cpu, BookOpen, Wrench, CheckCircle2, Cog, Bluetooth, Gauge, Zap, Code2, Play, RotateCcw, Variable, Braces, GitBranch, Repeat, Terminal } from "lucide-react";
 import spikeIcon from "@/assets/spike-icon.png";
 
 const SpikePage = () => {
@@ -134,6 +134,110 @@ const SpikePage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Программирование */}
+        <section id="programming">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="w-8 h-8 rounded-lg bg-[hsl(var(--spike-color)/.15)] flex items-center justify-center">
+              <Code2 className="w-4 h-4 text-spike" />
+            </div>
+            <h2 className="font-display text-xl md:text-2xl font-extrabold text-foreground">
+              Программирование
+            </h2>
+          </div>
+
+          <div className="space-y-6">
+            <div className="rounded-xl border border-border bg-card p-6">
+              <h3 className="font-display font-bold text-foreground mb-3">Среда программирования SPIKE App</h3>
+              <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
+                SPIKE Prime поддерживает два режима программирования в приложении LEGO Education SPIKE App:
+                <strong className="text-foreground"> блочный (Word Blocks)</strong> на основе Scratch и 
+                <strong className="text-foreground"> текстовый (Python)</strong>. Блочный режим идеален для начинающих — 
+                дети перетаскивают визуальные блоки, составляя алгоритмы. Текстовый режим на MicroPython позволяет 
+                писать полноценный код и готовит к «взрослому» программированию.
+              </p>
+              <p className="font-body text-muted-foreground text-sm leading-relaxed">
+                Приложение доступно на Windows, macOS, ChromeOS, iOS и Android. Программы загружаются 
+                на хаб по Bluetooth или USB и выполняются автономно.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-display font-bold text-foreground mb-3">Блочное программирование (Scratch)</h3>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {[
+                  { icon: <Play className="w-4 h-4" />, title: "Блоки событий", desc: "Запуск программы по нажатию кнопки хаба, при получении сообщения, по таймеру или при изменении датчика." },
+                  { icon: <Cog className="w-4 h-4" />, title: "Блоки моторов", desc: "Управление 3 моторами: задание скорости (%), угла поворота, количества оборотов, синхронное управление парой моторов." },
+                  { icon: <GitBranch className="w-4 h-4" />, title: "Блоки условий", desc: "«Если — то — иначе», сравнение значений датчиков, логические операторы И/ИЛИ/НЕ для сложных условий." },
+                  { icon: <Repeat className="w-4 h-4" />, title: "Блоки циклов", desc: "Повтор N раз, бесконечный цикл, цикл «пока выполняется условие». Вложенные циклы для сложных алгоритмов." },
+                  { icon: <Variable className="w-4 h-4" />, title: "Переменные и списки", desc: "Создание переменных для хранения данных: счётчик очков, показания датчиков, состояние робота." },
+                  { icon: <Braces className="w-4 h-4" />, title: "Мои блоки (функции)", desc: "Создание собственных блоков-подпрограмм для повторяющихся действий. Помогает структурировать код." },
+                ].map((block, i) => (
+                  <div key={i} className="rounded-xl border border-border bg-card p-4 hover:shadow-md transition-shadow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-[hsl(var(--spike-color)/.1)] flex items-center justify-center text-spike flex-shrink-0 mt-0.5">
+                        {block.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-display font-bold text-foreground text-sm">{block.title}</h4>
+                        <p className="font-body text-muted-foreground text-xs mt-1">{block.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-display font-bold text-foreground mb-3">Программирование на Python</h3>
+              <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+                <p className="font-body text-muted-foreground text-sm leading-relaxed">
+                  SPIKE Prime использует <strong className="text-foreground">MicroPython</strong> — облегчённую версию Python, 
+                  оптимизированную для микроконтроллеров. Ученики пишут код в текстовом редакторе приложения SPIKE App 
+                  с подсветкой синтаксиса, автодополнением и встроенной документацией.
+                </p>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {[
+                    { icon: <Terminal className="w-4 h-4" />, title: "Базовый синтаксис", desc: "Переменные, типы данных (int, float, str), арифметика, print() для вывода на дисплей хаба." },
+                    { icon: <GitBranch className="w-4 h-4" />, title: "Управляющие конструкции", desc: "if/elif/else, циклы for и while, операторы сравнения и логические операторы." },
+                    { icon: <Braces className="w-4 h-4" />, title: "Функции", desc: "def для создания функций, параметры и возвращаемые значения, модульность программ." },
+                    { icon: <Code2 className="w-4 h-4" />, title: "Библиотеки SPIKE", desc: "import hub, motor, color_sensor, distance_sensor — готовые модули для управления оборудованием." },
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-[hsl(var(--spike-color)/.1)] flex items-center justify-center text-spike flex-shrink-0 mt-0.5">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-display font-bold text-foreground text-sm">{item.title}</h4>
+                        <p className="font-body text-muted-foreground text-xs mt-1">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-6">
+              <h3 className="font-display font-bold text-foreground mb-3">Примеры программ</h3>
+              <div className="space-y-3">
+                {[
+                  { title: "Движение по квадрату (блоки)", desc: "Цикл 4 раза: Пара моторов вперёд на 20 см → Поворот на 90° вправо. Робот чертит квадратный маршрут." },
+                  { title: "Следование за рукой (блоки)", desc: "Бесконечный цикл: если расстояние < 15 см → ехать назад, если > 30 см → ехать вперёд, иначе → стоп." },
+                  { title: "Сортировщик цветов (Python)", desc: "color = color_sensor.color(port.A)\nif color == 'red': motor.run(port.B, 90)\nelif color == 'blue': motor.run(port.B, -90)" },
+                  { title: "Автономная навигация (Python)", desc: "while True:\n  dist = distance_sensor.distance(port.C)\n  if dist < 100: motor_pair.steer(50)\n  else: motor_pair.move(200)" },
+                ].map((example, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-spike mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-display font-bold text-foreground text-sm">{example.title}</h4>
+                      <p className="font-body text-muted-foreground text-xs mt-0.5 whitespace-pre-line">{example.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 

@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, Cpu, BookOpen, Wrench, CheckCircle2, Cog, Bluetooth, Gauge } from "lucide-react";
+import { ArrowLeft, Package, Cpu, BookOpen, Wrench, CheckCircle2, Cog, Bluetooth, Gauge, Code2, Play, RotateCcw, Volume2, Timer, MousePointer } from "lucide-react";
 import wedoIcon from "@/assets/wedo-icon.png";
 
 const tabData = [
@@ -153,6 +153,81 @@ const WedoPage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Программирование */}
+        <section id="programming">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+              <Code2 className="w-4 h-4 text-primary" />
+            </div>
+            <h2 className="font-display text-xl md:text-2xl font-extrabold text-foreground">
+              Программирование
+            </h2>
+          </div>
+
+          <div className="space-y-6">
+            <div className="rounded-xl border border-border bg-card p-6">
+              <h3 className="font-display font-bold text-foreground mb-3">Среда программирования WeDo 2.0</h3>
+              <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
+                Программирование в WeDo 2.0 осуществляется через специальное приложение LEGO Education WeDo 2.0 Software. 
+                Интерфейс основан на drag-and-drop — ребёнок перетаскивает блоки-команды на рабочую область и составляет 
+                из них последовательности (программы). Это визуальный язык, похожий на Scratch, но адаптированный для младших школьников.
+              </p>
+              <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
+                Также WeDo 2.0 полностью совместим со <strong className="text-foreground">Scratch 3.0</strong> — бесплатной средой программирования от MIT. 
+                Через расширение LEGO Education WeDo 2.0 в Scratch можно управлять мотором, считывать данные с датчиков и создавать 
+                интерактивные проекты с анимацией и звуком.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-display font-bold text-foreground mb-3">Основные блоки программирования</h3>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {[
+                  { icon: <Play className="w-4 h-4" />, title: "Блок «Начало»", desc: "Запускает выполнение программы. Может реагировать на нажатие кнопки, получение сообщения или наклон датчика." },
+                  { icon: <Cog className="w-4 h-4" />, title: "Блок «Мотор»", desc: "Управление мотором: включение, выключение, задание направления вращения (по часовой / против часовой) и мощности (1–10)." },
+                  { icon: <MousePointer className="w-4 h-4" />, title: "Блок «Датчик движения»", desc: "Считывает расстояние до объекта. Позволяет задавать условия: «если объект ближе / дальше заданного значения»." },
+                  { icon: <RotateCcw className="w-4 h-4" />, title: "Блок «Датчик наклона»", desc: "Определяет наклон хаба в 6 положениях: вверх, вниз, влево, вправо, любой наклон и отсутствие наклона." },
+                  { icon: <Volume2 className="w-4 h-4" />, title: "Блок «Звук»", desc: "Воспроизведение встроенных звуков или записанных аудио. Используется для озвучивания действий робота." },
+                  { icon: <Timer className="w-4 h-4" />, title: "Блок «Ожидание»", desc: "Пауза в выполнении программы на заданное время (в секундах). Необходим для последовательных действий." },
+                  { icon: <RotateCcw className="w-4 h-4" />, title: "Блок «Цикл»", desc: "Повторяет набор команд заданное количество раз или бесконечно. Основа для автономного поведения робота." },
+                  { icon: <Code2 className="w-4 h-4" />, title: "Блок «Отображение»", desc: "Вывод текста или числа на экран устройства. Используется для отладки и отображения данных датчиков." },
+                ].map((block, i) => (
+                  <div key={i} className="rounded-xl border border-border bg-card p-4 hover:shadow-md transition-shadow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+                        {block.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-display font-bold text-foreground text-sm">{block.title}</h4>
+                        <p className="font-body text-muted-foreground text-xs mt-1">{block.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-6">
+              <h3 className="font-display font-bold text-foreground mb-3">Примеры программ</h3>
+              <div className="space-y-3">
+                {[
+                  { title: "«Вперёд-назад»", desc: "Блок начала → Мотор вкл. (направление: вперёд, мощность: 5) → Ожидание 2 сек → Мотор вкл. (направление: назад) → Ожидание 2 сек → Мотор выкл." },
+                  { title: "«Умный стоп»", desc: "Блок начала → Мотор вкл. → Ожидание датчика движения (ближе 10 см) → Мотор выкл. → Звук «гудок»." },
+                  { title: "«Качели»", desc: "Блок начала → Цикл (бесконечно): Мотор вправо 1 сек → Мотор влево 1 сек. Модель раскачивается непрерывно." },
+                ].map((example, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-display font-bold text-foreground text-sm">{example.title}</h4>
+                      <p className="font-body text-muted-foreground text-xs mt-0.5">{example.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 

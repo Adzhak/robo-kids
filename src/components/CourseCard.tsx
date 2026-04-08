@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, ExternalLink, Package, Cpu, BookOpen, Wrench } from "lucide-react";
+import { ChevronDown, ExternalLink, Package, Cpu, BookOpen, Wrench, Code2 } from "lucide-react";
 
 interface CourseLink {
   label: string;
@@ -135,6 +135,7 @@ export const wedoCourse: CourseCardProps = {
     { label: "Детали набора", url: "/wedo#details", icon: <Package className="w-3 h-3" /> },
     { label: "Тех. характеристики", url: "/wedo#tech", icon: <Cpu className="w-3 h-3" /> },
     { label: "Перейти к курсу", url: "/wedo#course", icon: <BookOpen className="w-3 h-3" /> },
+    { label: "Программирование", url: "/wedo#programming", icon: <Code2 className="w-3 h-3" /> },
     { label: "Инструкции сборки", url: "/wedo#builds", icon: <Wrench className="w-3 h-3" /> },
   ],
 };
@@ -158,6 +159,7 @@ export const spikeCourse: CourseCardProps = {
     { label: "Детали набора", url: "/spike#details", icon: <Package className="w-3 h-3" /> },
     { label: "Тех. характеристики", url: "/spike#tech", icon: <Cpu className="w-3 h-3" /> },
     { label: "Перейти к курсу", url: "/spike#course", icon: <BookOpen className="w-3 h-3" /> },
+    { label: "Программирование", url: "/spike#programming", icon: <Code2 className="w-3 h-3" /> },
     { label: "Инструкции сборки", url: "/spike#builds", icon: <Wrench className="w-3 h-3" /> },
   ],
 };
