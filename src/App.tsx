@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,7 +8,6 @@ import WedoPage from "./pages/WedoPage.tsx";
 import SpikePage from "./pages/SpikePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 
 const ScrollToHash = () => {
   const { pathname, hash } = useLocation();
