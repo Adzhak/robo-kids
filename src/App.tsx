@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 
 const ScrollToHash = () => {
   const { pathname, hash } = useLocation();
+
   useEffect(() => {
     if (hash) {
       setTimeout(() => {
@@ -21,6 +22,7 @@ const ScrollToHash = () => {
       window.scrollTo(0, 0);
     }
   }, [pathname, hash]);
+
   return null;
 };
 
@@ -31,7 +33,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <HashRouter>
         <ScrollToHash />
         <Routes>
           <Route path="/" element={<Index />} />
@@ -39,7 +41,7 @@ const App = () => (
           <Route path="/spike" element={<SpikePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
