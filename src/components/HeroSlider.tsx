@@ -42,7 +42,7 @@ const HeroSlider = () => {
           Робототехника для детей
         </h2>
         <p className="font-body text-card/90 text-base md:text-lg max-w-xl drop-shadow">
-          Увлекательные онлайн-курсы по робототехнике для учеников 1–4 классов
+          Доступные знания по робототехнике для 1-4 классов
         </p>
       </div>
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">

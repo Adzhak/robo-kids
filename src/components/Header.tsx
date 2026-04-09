@@ -27,7 +27,7 @@ const Header = () => {
             <h1 className="font-display text-xl font-extrabold leading-tight text-foreground">
               РобоСтарт
             </h1>
-            <p className="text-xs text-muted-foreground leading-none">Онлайн-школа робототехники</p>
+            <p className="text-xs text-muted-foreground leading-none">Сайт образовательной робототехники</p>
           </div>
         </button>
 

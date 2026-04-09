@@ -3,7 +3,7 @@ import HeroSlider from "@/components/HeroSlider";
 import CourseCard, { wedoCourse, spikeCourse } from "@/components/CourseCard";
 import wedoIcon from "@/assets/wedo-icon.png";
 import spikeIcon from "@/assets/spike-icon.png";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Instagram } from "lucide-react";
 
 const Index = () => {
   return (
@@ -30,11 +30,13 @@ const Index = () => {
 
       <section id="about" className="container mx-auto px-4 py-12 md:py-16">
         <div className="text-center mb-8">
-          <h2 className="font-display text-2xl md:text-3xl font-extrabold text-foreground">О нас</h2>
+          <h2 className="font-display text-2xl md:text-3xl font-extrabold text-foreground">
+            О нас
+          </h2>
         </div>
         <div className="max-w-2xl mx-auto space-y-4 font-body text-muted-foreground text-sm md:text-base leading-relaxed">
           <p>
-            <strong className="text-foreground">РобоСтарт</strong> — это онлайн-школа робототехники для детей 1–4 классов.
+            <strong className="text-foreground">РобоСтарт</strong> — это образовательный сайт по робототехнике для детей 1–4 классов.
             Мы обучаем конструированию и программированию на базе наборов LEGO Education WeDo 2.0 и SPIKE Prime.
           </p>
           <p>
@@ -42,8 +44,8 @@ const Index = () => {
             Каждый урок включает теорию, практическую сборку и программирование модели.
           </p>
           <p>
-            Преподаватели — сертифицированные педагоги с опытом работы в STEM-образовании.
-            Занятия проходят онлайн в удобное время, в малых группах до 6 человек.
+            Материалы сайта помогают детям знакомиться с основами STEM-направления в понятной и увлекательной форме,
+            а также поддерживают интерес к обучению через практику и творчество.
           </p>
         </div>
       </section>
@@ -51,8 +53,16 @@ const Index = () => {
       <footer id="contacts" className="border-t border-border bg-muted/50 py-8">
         <div className="container mx-auto px-4 text-center font-body text-sm text-muted-foreground space-y-2">
           <p className="font-display font-bold text-foreground">Контакты</p>
-          <p>Email: info@robostart.ru · Телефон: +7 (999) 123-45-67</p>
-          <p>© 2026 РобоСтарт — Онлайн-школа робототехники для детей</p>
+          <a
+            href="https://www.instagram.com/milestone.school/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+          >
+            <Instagram className="w-5 h-5" />
+            @milestone.school
+          </a>
+          <p>© 2026 РобоСтарт — образовательный сайт по робототехнике для детей</p>
         </div>
       </footer>
     </div>
