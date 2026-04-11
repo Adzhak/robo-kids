@@ -74,6 +74,65 @@ const builds = [
   },
 ];
 
+const quizQuestions = [
+  {
+    id: "q1",
+    title: "Задача 1",
+    program:
+      "Старт → Цикл 4 раза: ехать вперёд 20 см → повернуть вправо на 90°",
+    options: [
+      "Робот поедет по кругу",
+      "Робот проедет квадрат",
+      "Робот остановится сразу",
+    ],
+    correctIndex: 1,
+    explanation:
+      "Четыре одинаковых участка с поворотом на 90° образуют квадратный маршрут.",
+  },
+  {
+    id: "q2",
+    title: "Задача 2",
+    program:
+      "Старт → Если расстояние меньше 15 см, то моторы назад, иначе моторы вперёд",
+    options: [
+      "Робот всегда едет назад",
+      "Робот останавливается при препятствии",
+      "Робот отъезжает назад, когда объект слишком близко",
+    ],
+    correctIndex: 2,
+    explanation:
+      "Когда датчик видит объект ближе 15 см, выполняется ветка 'назад'. Иначе робот едет вперёд.",
+  },
+  {
+    id: "q3",
+    title: "Задача 3",
+    program:
+      "Python:\ncolor = color_sensor.color(port.A)\nif color == 'red':\n    motor.run(port.B, 90)\nelif color == 'blue':\n    motor.run(port.B, -90)",
+    options: [
+      "Мотор всегда крутится только вперёд",
+      "Красный и синий цвет запускают мотор в разные стороны",
+      "Программа считает расстояние до объекта",
+    ],
+    correctIndex: 1,
+    explanation:
+      "Для красного выполняется вращение в одну сторону, для синего — в другую.",
+  },
+  {
+    id: "q4",
+    title: "Задача 4",
+    program:
+      "Python:\nwhile True:\n    dist = distance_sensor.distance(port.C)\n    if dist < 100:\n        motor_pair.steer(50)\n    else:\n        motor_pair.move(200)",
+    options: [
+      "Если впереди близко препятствие, робот меняет направление",
+      "Робот едет только прямо и никогда не поворачивает",
+      "Программа включает звук, когда расстояние меньше 100",
+    ],
+    correctIndex: 0,
+    explanation:
+      "При близком препятствии выполняется команда steer, то есть робот меняет курс. Иначе движется прямо.",
+  },
+];
+
 const STORAGE_KEY = "spike-build-progress-v1";
 
 const SpikePage = () => {
@@ -81,6 +140,20 @@ const SpikePage = () => {
 
   const [selectedBuild, setSelectedBuild] = useState<(typeof builds)[number] | null>(null);
   const [completedBuildIds, setCompletedBuildIds] = useState<string[]>([]);
+
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, number | null>>({
+    q1: null,
+    q2: null,
+    q3: null,
+    q4: null,
+  });
+
+  const [quizChecked, setQuizChecked] = useState<Record<string, boolean>>({
+    q1: false,
+    q2: false,
+    q3: false,
+    q4: false,
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -132,6 +205,42 @@ const SpikePage = () => {
         ? prev.filter((id) => id !== buildId)
         : [...prev, buildId]
     );
+  };
+
+  const setQuizAnswer = (questionId: string, optionIndex: number) => {
+    setQuizAnswers((prev) => ({
+      ...prev,
+      [questionId]: optionIndex,
+    }));
+
+    setQuizChecked((prev) => ({
+      ...prev,
+      [questionId]: false,
+    }));
+  };
+
+  const checkQuizAnswer = (questionId: string) => {
+    if (quizAnswers[questionId] === null) return;
+
+    setQuizChecked((prev) => ({
+      ...prev,
+      [questionId]: true,
+    }));
+  };
+
+  const resetQuiz = () => {
+    setQuizAnswers({
+      q1: null,
+      q2: null,
+      q3: null,
+      q4: null,
+    });
+    setQuizChecked({
+      q1: false,
+      q2: false,
+      q3: false,
+      q4: false,
+    });
   };
 
   return (
@@ -285,8 +394,8 @@ const SpikePage = () => {
               { num: 3, title: "Работа с датчиками", desc: "Датчик цвета, расстояния, силы нажатия. Условия и циклы." },
               { num: 4, title: "Продвинутые механизмы", desc: "Захваты, подъёмники, рулевое управление, шагающие роботы." },
               { num: 5, title: "Программирование на Python", desc: "Переход от блочного к текстовому программированию, переменные, функции." },
-              { num: 6, title: "Проект «Робот-сортировщик»", desc: "Робот, распознающий цвета и сортирующий объекты по категориям." },
-              { num: 7, title: "Проект «Автономный транспорт»", desc: "Робот с навигацией по линии и объездом препятствий." },
+              { num: 6, title: "Проект «Робот-доставщик»", desc: "Робот, доставляющий больщие грузы." },
+              { num: 7, title: "Проект «Башеный кран»", desc: "Робот с системой крана для передвижения болших объектов." },
               { num: 8, title: "Финальный проект", desc: "Свободный проект: ученик придумывает и реализует своего робота." },
             ].map((lesson) => (
               <div
@@ -440,6 +549,111 @@ const SpikePage = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Мини-викторина */}
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+                <div>
+                  <h3 className="font-display font-bold text-foreground">
+                    Мини-викторина: что сделает робот?
+                  </h3>
+                  <p className="font-body text-muted-foreground text-sm mt-1">
+                    4 задачи по логике, датчикам, циклам и Python.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={resetQuiz}
+                  className="inline-flex items-center justify-center rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Пройти заново
+                </button>
+              </div>
+
+              <div className="space-y-5">
+                {quizQuestions.map((question) => {
+                  const selected = quizAnswers[question.id];
+                  const checked = quizChecked[question.id];
+                  const isCorrect = selected === question.correctIndex;
+
+                  return (
+                    <div
+                      key={question.id}
+                      className="rounded-xl border border-border bg-background p-4"
+                    >
+                      <h4 className="font-display font-bold text-foreground text-sm mb-2">
+                        {question.title}
+                      </h4>
+
+                      <div className="rounded-lg bg-[hsl(var(--spike-color)/.08)] border border-[hsl(var(--spike-color)/.15)] px-4 py-3 mb-4">
+                        <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-line">
+                          {question.program}
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        {question.options.map((option, optionIndex) => {
+                          const isSelected = selected === optionIndex;
+                          const isRightOption = question.correctIndex === optionIndex;
+
+                          let optionClass =
+                            "w-full text-left rounded-lg border px-3 py-3 text-sm transition-colors ";
+
+                          if (checked && isRightOption) {
+                            optionClass += "border-spike bg-[hsl(var(--spike-color)/.12)] text-foreground";
+                          } else if (checked && isSelected && !isRightOption) {
+                            optionClass += "border-destructive bg-destructive/10 text-foreground";
+                          } else if (isSelected) {
+                            optionClass += "border-spike bg-[hsl(var(--spike-color)/.08)] text-foreground";
+                          } else {
+                            optionClass += "border-border hover:bg-muted text-foreground";
+                          }
+
+                          return (
+                            <button
+                              key={optionIndex}
+                              type="button"
+                              onClick={() => setQuizAnswer(question.id, optionIndex)}
+                              className={optionClass}
+                            >
+                              {option}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="mt-4 flex items-center gap-3 flex-wrap">
+                        <button
+                          type="button"
+                          onClick={() => checkQuizAnswer(question.id)}
+                          disabled={selected === null}
+                          className="inline-flex items-center justify-center rounded-lg bg-spike text-primary-foreground px-4 py-2 text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                        >
+                          Проверить
+                        </button>
+
+                        {checked && (
+                          <div
+                            className={`text-sm font-medium ${
+                              isCorrect ? "text-spike" : "text-destructive"
+                            }`}
+                          >
+                            {isCorrect ? "Верно!" : "Неправильно"}
+                          </div>
+                        )}
+                      </div>
+
+                      {checked && (
+                        <p className="text-sm text-muted-foreground mt-3">
+                          {question.explanation}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
