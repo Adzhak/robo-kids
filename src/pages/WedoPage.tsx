@@ -68,7 +68,7 @@ const builds = [
     pdf: raceCarPdf,
   },
   {
-    name: "Вентилятор",
+    name: "Пчелка",
     difficulty: "Средний",
     pdf: beePdf,
   },

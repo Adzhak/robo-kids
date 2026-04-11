@@ -1,7 +1,68 @@
 import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, Cpu, BookOpen, Wrench, CheckCircle2, Cog, Bluetooth, Gauge, Zap, Code2, Play, RotateCcw, Variable, Braces, GitBranch, Repeat, Terminal } from "lucide-react";
+import {
+  ArrowLeft,
+  Package,
+  Cpu,
+  BookOpen,
+  Wrench,
+  CheckCircle2,
+  Cog,
+  Bluetooth,
+  Gauge,
+  Zap,
+  Code2,
+  Play,
+  RotateCcw,
+  Variable,
+  Braces,
+  GitBranch,
+  Repeat,
+  Terminal,
+} from "lucide-react";
 import spikeIcon from "@/assets/spike-icon.png";
+
+/* === ИМПОРТ PDF === */
+import breakDancerPdf from "@/pdf/spike/break-dancer.pdf";
+import deliveryRobotPdf from "@/pdf/spike/delivery-robot.pdf";
+import windmillPdf from "@/pdf/spike/windmill.pdf";
+import blasterPdf from "@/pdf/spike/blaster.pdf";
+import airplanePdf from "@/pdf/spike/airplane.pdf";
+import towerCranePdf from "@/pdf/spike/tower-crane.pdf";
+
+/* === ДАННЫЕ СБОРКИ === */
+const builds = [
+  {
+    name: "Брейк-дансер",
+    difficulty: "Начальный",
+    pdf: breakDancerPdf,
+  },
+  {
+    name: "Робот-доставщик",
+    difficulty: "Начальный",
+    pdf: deliveryRobotPdf,
+  },
+  {
+    name: "Ветряк",
+    difficulty: "Начальный",
+    pdf: windmillPdf,
+  },
+  {
+    name: "Пушка",
+    difficulty: "Средний",
+    pdf: blasterPdf,
+  },
+  {
+    name: "Самолет",
+    difficulty: "Продвинутый",
+    pdf: airplanePdf,
+  },
+  {
+    name: "Башенный кран",
+    difficulty: "Продвинутый",
+    pdf: towerCranePdf,
+  },
+];
 
 const SpikePage = () => {
   const navigate = useNavigate();
@@ -21,7 +82,11 @@ const SpikePage = () => {
           </button>
           <div className="flex items-center gap-5">
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-[hsl(var(--spike-color)/.15)] flex items-center justify-center flex-shrink-0">
-              <img src={spikeIcon} alt="Spike Prime" className="w-16 h-16 md:w-20 md:h-20 object-contain" />
+              <img
+                src={spikeIcon}
+                alt="Spike Prime"
+                className="w-16 h-16 md:w-20 md:h-20 object-contain"
+              />
             </div>
             <div>
               <span className="inline-block text-xs font-bold px-2.5 py-0.5 rounded-full bg-spike text-primary-foreground mb-2">
@@ -51,21 +116,52 @@ const SpikePage = () => {
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              { title: "Программируемый хаб", desc: "Центральный блок с цветным LED-дисплеем 5×5, 6 портами ввода/вывода, встроенным гироскопом/акселерометром и динамиком." },
-              { title: "2 больших мотора", desc: "Мощные моторы с встроенным датчиком вращения для точного управления движением робота." },
-              { title: "1 средний мотор", desc: "Компактный мотор для вспомогательных механизмов: захватов, рычагов, поворотных платформ." },
-              { title: "Датчик расстояния", desc: "Ультразвуковой датчик для определения расстояния до объектов и обнаружения препятствий." },
-              { title: "Датчик цвета", desc: "Определяет 8 цветов, интенсивность отражённого света и окружающего освещения." },
-              { title: "Датчик силы нажатия", desc: "Измеряет силу нажатия и касание. Подходит для создания интерактивных кнопок и бамперов." },
-              { title: "500+ деталей Technic", desc: "Балки, оси, шестерни, коннекторы, колёса и гусеницы для создания сложных конструкций." },
-              { title: "Аккумулятор", desc: "Перезаряжаемая литий-ионная батарея. Зарядка через Micro-USB, хватает на ~4 часа работы." },
+              {
+                title: "Программируемый хаб",
+                desc: "Центральный блок с цветным LED-дисплеем 5×5, 6 портами ввода/вывода, встроенным гироскопом/акселерометром и динамиком.",
+              },
+              {
+                title: "2 больших мотора",
+                desc: "Мощные моторы с встроенным датчиком вращения для точного управления движением робота.",
+              },
+              {
+                title: "1 средний мотор",
+                desc: "Компактный мотор для вспомогательных механизмов: захватов, рычагов, поворотных платформ.",
+              },
+              {
+                title: "Датчик расстояния",
+                desc: "Ультразвуковой датчик для определения расстояния до объектов и обнаружения препятствий.",
+              },
+              {
+                title: "Датчик цвета",
+                desc: "Определяет 8 цветов, интенсивность отражённого света и окружающего освещения.",
+              },
+              {
+                title: "Датчик силы нажатия",
+                desc: "Измеряет силу нажатия и касание. Подходит для создания интерактивных кнопок и бамперов.",
+              },
+              {
+                title: "500+ деталей Technic",
+                desc: "Балки, оси, шестерни, коннекторы, колёса и гусеницы для создания сложных конструкций.",
+              },
+              {
+                title: "Аккумулятор",
+                desc: "Перезаряжаемая литий-ионная батарея. Зарядка через Micro-USB, хватает на ~4 часа работы.",
+              },
             ].map((item, i) => (
-              <div key={i} className="rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow">
+              <div
+                key={i}
+                className="rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow"
+              >
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-spike mt-0.5 flex-shrink-0" />
                   <div>
-                    <h3 className="font-display font-bold text-foreground text-sm">{item.title}</h3>
-                    <p className="font-body text-muted-foreground text-sm mt-1">{item.desc}</p>
+                    <h3 className="font-display font-bold text-foreground text-sm">
+                      {item.title}
+                    </h3>
+                    <p className="font-body text-muted-foreground text-sm mt-1">
+                      {item.desc}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -97,7 +193,9 @@ const SpikePage = () => {
                   {spec.icon}
                 </div>
                 <p className="font-body text-xs text-muted-foreground">{spec.label}</p>
-                <p className="font-display font-bold text-foreground text-sm mt-0.5">{spec.value}</p>
+                <p className="font-display font-bold text-foreground text-sm mt-0.5">
+                  {spec.value}
+                </p>
               </div>
             ))}
           </div>
@@ -124,13 +222,20 @@ const SpikePage = () => {
               { num: 7, title: "Проект «Автономный транспорт»", desc: "Робот с навигацией по линии и объездом препятствий." },
               { num: 8, title: "Финальный проект", desc: "Свободный проект: ученик придумывает и реализует своего робота." },
             ].map((lesson) => (
-              <div key={lesson.num} className="flex gap-4 items-start rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow">
+              <div
+                key={lesson.num}
+                className="flex gap-4 items-start rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow"
+              >
                 <div className="w-10 h-10 rounded-full bg-spike text-primary-foreground flex items-center justify-center font-display font-extrabold text-sm flex-shrink-0">
                   {lesson.num}
                 </div>
                 <div>
-                  <h3 className="font-display font-bold text-foreground text-sm">{lesson.title}</h3>
-                  <p className="font-body text-muted-foreground text-sm mt-0.5">{lesson.desc}</p>
+                  <h3 className="font-display font-bold text-foreground text-sm">
+                    {lesson.title}
+                  </h3>
+                  <p className="font-body text-muted-foreground text-sm mt-0.5">
+                    {lesson.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -150,22 +255,26 @@ const SpikePage = () => {
 
           <div className="space-y-6">
             <div className="rounded-xl border border-border bg-card p-6">
-              <h3 className="font-display font-bold text-foreground mb-3">Среда программирования SPIKE App</h3>
+              <h3 className="font-display font-bold text-foreground mb-3">
+                Среда программирования SPIKE App
+              </h3>
               <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
                 SPIKE Prime поддерживает два режима программирования в приложении LEGO Education SPIKE App:
-                <strong className="text-foreground"> блочный (Word Blocks)</strong> на основе Scratch и 
-                <strong className="text-foreground"> текстовый (Python)</strong>. Блочный режим идеален для начинающих — 
-                дети перетаскивают визуальные блоки, составляя алгоритмы. Текстовый режим на MicroPython позволяет 
+                <strong className="text-foreground"> блочный (Word Blocks)</strong> на основе Scratch и
+                <strong className="text-foreground"> текстовый (Python)</strong>. Блочный режим идеален для начинающих —
+                дети перетаскивают визуальные блоки, составляя алгоритмы. Текстовый режим на MicroPython позволяет
                 писать полноценный код и готовит к «взрослому» программированию.
               </p>
               <p className="font-body text-muted-foreground text-sm leading-relaxed">
-                Приложение доступно на Windows, macOS, ChromeOS, iOS и Android. Программы загружаются 
+                Приложение доступно на Windows, macOS, ChromeOS, iOS и Android. Программы загружаются
                 на хаб по Bluetooth или USB и выполняются автономно.
               </p>
             </div>
 
             <div>
-              <h3 className="font-display font-bold text-foreground mb-3">Блочное программирование (Scratch)</h3>
+              <h3 className="font-display font-bold text-foreground mb-3">
+                Блочное программирование (Scratch)
+              </h3>
               <div className="grid sm:grid-cols-2 gap-3">
                 {[
                   { icon: <Play className="w-4 h-4" />, title: "Блоки событий", desc: "Запуск программы по нажатию кнопки хаба, при получении сообщения, по таймеру или при изменении датчика." },
@@ -181,8 +290,12 @@ const SpikePage = () => {
                         {block.icon}
                       </div>
                       <div>
-                        <h4 className="font-display font-bold text-foreground text-sm">{block.title}</h4>
-                        <p className="font-body text-muted-foreground text-xs mt-1">{block.desc}</p>
+                        <h4 className="font-display font-bold text-foreground text-sm">
+                          {block.title}
+                        </h4>
+                        <p className="font-body text-muted-foreground text-xs mt-1">
+                          {block.desc}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -191,11 +304,13 @@ const SpikePage = () => {
             </div>
 
             <div>
-              <h3 className="font-display font-bold text-foreground mb-3">Программирование на Python</h3>
+              <h3 className="font-display font-bold text-foreground mb-3">
+                Программирование на Python
+              </h3>
               <div className="rounded-xl border border-border bg-card p-6 space-y-4">
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">
-                  SPIKE Prime использует <strong className="text-foreground">MicroPython</strong> — облегчённую версию Python, 
-                  оптимизированную для микроконтроллеров. Ученики пишут код в текстовом редакторе приложения SPIKE App 
+                  SPIKE Prime использует <strong className="text-foreground">MicroPython</strong> — облегчённую версию Python,
+                  оптимизированную для микроконтроллеров. Ученики пишут код в текстовом редакторе приложения SPIKE App
                   с подсветкой синтаксиса, автодополнением и встроенной документацией.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-3">
@@ -210,8 +325,12 @@ const SpikePage = () => {
                         {item.icon}
                       </div>
                       <div>
-                        <h4 className="font-display font-bold text-foreground text-sm">{item.title}</h4>
-                        <p className="font-body text-muted-foreground text-xs mt-1">{item.desc}</p>
+                        <h4 className="font-display font-bold text-foreground text-sm">
+                          {item.title}
+                        </h4>
+                        <p className="font-body text-muted-foreground text-xs mt-1">
+                          {item.desc}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -220,19 +339,37 @@ const SpikePage = () => {
             </div>
 
             <div className="rounded-xl border border-border bg-card p-6">
-              <h3 className="font-display font-bold text-foreground mb-3">Примеры программ</h3>
+              <h3 className="font-display font-bold text-foreground mb-3">
+                Примеры программ
+              </h3>
               <div className="space-y-3">
                 {[
-                  { title: "Движение по квадрату (блоки)", desc: "Цикл 4 раза: Пара моторов вперёд на 20 см → Поворот на 90° вправо. Робот чертит квадратный маршрут." },
-                  { title: "Следование за рукой (блоки)", desc: "Бесконечный цикл: если расстояние < 15 см → ехать назад, если > 30 см → ехать вперёд, иначе → стоп." },
-                  { title: "Сортировщик цветов (Python)", desc: "color = color_sensor.color(port.A)\nif color == 'red': motor.run(port.B, 90)\nelif color == 'blue': motor.run(port.B, -90)" },
-                  { title: "Автономная навигация (Python)", desc: "while True:\n  dist = distance_sensor.distance(port.C)\n  if dist < 100: motor_pair.steer(50)\n  else: motor_pair.move(200)" },
+                  {
+                    title: "Движение по квадрату (блоки)",
+                    desc: "Цикл 4 раза: Пара моторов вперёд на 20 см → Поворот на 90° вправо. Робот чертит квадратный маршрут.",
+                  },
+                  {
+                    title: "Следование за рукой (блоки)",
+                    desc: "Бесконечный цикл: если расстояние < 15 см → ехать назад, если > 30 см → ехать вперёд, иначе → стоп.",
+                  },
+                  {
+                    title: "Сортировщик цветов (Python)",
+                    desc: "color = color_sensor.color(port.A)\nif color == 'red': motor.run(port.B, 90)\nelif color == 'blue': motor.run(port.B, -90)",
+                  },
+                  {
+                    title: "Автономная навигация (Python)",
+                    desc: "while True:\n  dist = distance_sensor.distance(port.C)\n  if dist < 100: motor_pair.steer(50)\n  else: motor_pair.move(200)",
+                  },
                 ].map((example, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-spike mt-0.5 flex-shrink-0" />
                     <div>
-                      <h4 className="font-display font-bold text-foreground text-sm">{example.title}</h4>
-                      <p className="font-body text-muted-foreground text-xs mt-0.5 whitespace-pre-line">{example.desc}</p>
+                      <h4 className="font-display font-bold text-foreground text-sm">
+                        {example.title}
+                      </h4>
+                      <p className="font-body text-muted-foreground text-xs mt-0.5 whitespace-pre-line">
+                        {example.desc}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -251,28 +388,29 @@ const SpikePage = () => {
               Инструкции по сборке
             </h2>
           </div>
+
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              { name: "Базовая тележка", difficulty: "Начальный" },
-              { name: "Робот-захватчик", difficulty: "Средний" },
-              { name: "Шагающий робот", difficulty: "Продвинутый" },
-              { name: "Гоночный болид", difficulty: "Средний" },
-              { name: "Робот-художник", difficulty: "Продвинутый" },
-              { name: "Сортировщик цветов", difficulty: "Продвинутый" },
-              { name: "Кран", difficulty: "Средний" },
-              { name: "Танцующий робот", difficulty: "Начальный" },
-              { name: "Гусеничный вездеход", difficulty: "Продвинутый" },
-            ].map((build, i) => (
-              <div key={i} className="rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow group cursor-pointer">
+            {builds.map((build, i) => (
+              <div
+                key={i}
+                onClick={() => window.open(build.pdf, "_blank", "noopener,noreferrer")}
+                className="rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow group cursor-pointer"
+              >
                 <div className="w-12 h-12 rounded-xl bg-[hsl(var(--spike-color)/.1)] flex items-center justify-center text-spike mb-3 group-hover:bg-[hsl(var(--spike-color)/.2)] transition-colors">
                   <Wrench className="w-5 h-5" />
                 </div>
-                <h3 className="font-display font-bold text-foreground text-sm">{build.name}</h3>
-                <span className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${
-                  build.difficulty === "Начальный" ? "bg-accent/20 text-accent" :
-                  build.difficulty === "Средний" ? "bg-secondary/20 text-secondary" :
-                  "bg-destructive/20 text-destructive"
-                }`}>
+                <h3 className="font-display font-bold text-foreground text-sm">
+                  {build.name}
+                </h3>
+                <span
+                  className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${
+                    build.difficulty === "Начальный"
+                      ? "bg-accent/20 text-accent"
+                      : build.difficulty === "Средний"
+                      ? "bg-secondary/20 text-secondary"
+                      : "bg-destructive/20 text-destructive"
+                  }`}
+                >
                   {build.difficulty}
                 </span>
               </div>
