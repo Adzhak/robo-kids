@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   Package,
@@ -16,6 +17,9 @@ import {
   Volume2,
   Timer,
   MousePointer,
+  X,
+  Check,
+  Circle,
 } from "lucide-react";
 import wedoIcon from "@/assets/wedo-icon.png";
 
@@ -53,39 +57,102 @@ const tabData = [
 /* === ДАННЫЕ СБОРКИ === */
 const builds = [
   {
+    id: "milo",
     name: "Майло — научный вездеход",
     difficulty: "Начальный",
     pdf: miloPdf,
   },
   {
+    id: "traction",
     name: "Тяга",
     difficulty: "Начальный",
     pdf: tractionPdf,
   },
   {
+    id: "race-car",
     name: "Гоночная машина",
     difficulty: "Средний",
     pdf: raceCarPdf,
   },
   {
+    id: "bee",
     name: "Пчелка",
     difficulty: "Средний",
     pdf: beePdf,
   },
   {
+    id: "helicopter",
     name: "Вертолет",
     difficulty: "Продвинутый",
     pdf: heliPdf,
   },
   {
+    id: "gruz",
     name: "Грузовик",
     difficulty: "Продвинутый",
     pdf: gruzPdf,
   },
 ];
 
+const STORAGE_KEY = "wedo-build-progress-v1";
+
 const WedoPage = () => {
   const navigate = useNavigate();
+
+  const [selectedBuild, setSelectedBuild] = useState<(typeof builds)[number] | null>(null);
+  const [completedBuildIds, setCompletedBuildIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    try {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        setCompletedBuildIds(parsed);
+      }
+    } catch {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(completedBuildIds));
+  }, [completedBuildIds]);
+
+  useEffect(() => {
+    if (!selectedBuild) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedBuild(null);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [selectedBuild]);
+
+  const completedCount = completedBuildIds.length;
+  const progressPercent = useMemo(
+    () => Math.round((completedCount / builds.length) * 100),
+    [completedCount]
+  );
+
+  const isCompleted = (buildId: string) => completedBuildIds.includes(buildId);
+
+  const toggleCompleted = (buildId: string) => {
+    setCompletedBuildIds((prev) =>
+      prev.includes(buildId)
+        ? prev.filter((id) => id !== buildId)
+        : [...prev, buildId]
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -432,43 +499,165 @@ const WedoPage = () => {
 
         {/* Сборки */}
         <section id="builds">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
-              <Wrench className="w-4 h-4 text-primary" />
+          <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                <Wrench className="w-4 h-4 text-primary" />
+              </div>
+              <h2 className="font-display text-xl md:text-2xl font-extrabold text-foreground">
+                Инструкции по сборке
+              </h2>
             </div>
-            <h2 className="font-display text-xl md:text-2xl font-extrabold text-foreground">
-              Инструкции по сборке
-            </h2>
-          </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {builds.map((build, i) => (
-              <div
-                key={i}
-                onClick={() => window.open(build.pdf, "_blank", "noopener,noreferrer")}
-                className="rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow group cursor-pointer"
-              >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:bg-primary/20 transition-colors">
-                  <Wrench className="w-5 h-5" />
-                </div>
-                <h3 className="font-display font-bold text-foreground text-sm">
-                  {build.name}
-                </h3>
-                <span
-                  className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${
-                    build.difficulty === "Начальный"
-                      ? "bg-accent/20 text-accent"
-                      : build.difficulty === "Средний"
-                      ? "bg-secondary/20 text-secondary"
-                      : "bg-destructive/20 text-destructive"
-                  }`}
-                >
-                  {build.difficulty}
+
+            <div className="min-w-[260px] rounded-xl border border-border bg-card px-4 py-3">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <span className="text-sm font-medium text-foreground">Прогресс ученика</span>
+                <span className="text-sm text-muted-foreground">
+                  {completedCount} / {builds.length}
                 </span>
               </div>
-            ))}
+              <div className="w-full h-2 rounded-full bg-muted overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Завершено {progressPercent}%
+              </p>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {builds.map((build) => {
+              const completed = isCompleted(build.id);
+
+              return (
+                <div
+                  key={build.id}
+                  className="rounded-xl border border-border bg-card p-5 hover:shadow-md transition-shadow group"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBuild(build)}
+                    className="w-full text-left cursor-pointer"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:bg-primary/20 transition-colors">
+                      <Wrench className="w-5 h-5" />
+                    </div>
+
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-display font-bold text-foreground text-sm">
+                        {build.name}
+                      </h3>
+
+                      {completed ? (
+                        <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                      ) : (
+                        <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                      )}
+                    </div>
+
+                    <span
+                      className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${
+                        build.difficulty === "Начальный"
+                          ? "bg-accent/20 text-accent"
+                          : build.difficulty === "Средний"
+                          ? "bg-secondary/20 text-secondary"
+                          : "bg-destructive/20 text-destructive"
+                      }`}
+                    >
+                      {build.difficulty}
+                    </span>
+
+                    <p className="text-xs text-muted-foreground mt-3">
+                      Нажмите, чтобы открыть инструкцию
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => toggleCompleted(build.id)}
+                    className={`mt-4 w-full inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                      completed
+                        ? "bg-primary text-primary-foreground hover:opacity-90"
+                        : "bg-primary/10 text-primary hover:bg-primary/20"
+                    }`}
+                  >
+                    {completed ? (
+                      <>
+                        <Check className="w-4 h-4" />
+                        Пройдено
+                      </>
+                    ) : (
+                      <>
+                        <Check className="w-4 h-4" />
+                        Отметить как пройдено
+                      </>
+                    )}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </section>
       </div>
+
+      {/* PDF MODAL */}
+      {selectedBuild && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 p-3 md:p-6"
+          onClick={() => setSelectedBuild(null)}
+        >
+          <div
+            className="mx-auto h-full max-w-6xl rounded-2xl bg-background border border-border shadow-2xl flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3">
+              <div>
+                <h3 className="font-display font-bold text-foreground text-base md:text-lg">
+                  {selectedBuild.name}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Пошаговая инструкция в PDF
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleCompleted(selectedBuild.id)}
+                  className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    isCompleted(selectedBuild.id)
+                      ? "bg-primary text-primary-foreground hover:opacity-90"
+                      : "bg-primary/10 text-primary hover:bg-primary/20"
+                  }`}
+                >
+                  <Check className="w-4 h-4" />
+                  {isCompleted(selectedBuild.id) ? "Пройдено" : "Отметить как пройдено"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedBuild(null)}
+                  className="inline-flex items-center justify-center rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                  aria-label="Закрыть"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 bg-muted/30 min-h-[70vh]">
+              <iframe
+                src={selectedBuild.pdf}
+                title={selectedBuild.name}
+                className="w-full h-full min-h-[70vh]"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="border-t border-border bg-muted/50 py-8">
         <div className="container mx-auto px-4 text-center font-body text-sm text-muted-foreground">
