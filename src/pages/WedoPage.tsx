@@ -94,6 +94,35 @@ const builds = [
   },
 ];
 
+const quizQuestions = [
+  {
+    id: "q1",
+    title: "Задача 1",
+    program:
+      "Начало → Мотор вперёд → Ожидание 2 сек → Мотор выкл.",
+    options: [
+      "Робот поедет вперёд 2 секунды и остановится",
+      "Робот будет ехать назад без остановки",
+      "Робот только издаст звук",
+    ],
+    correctIndex: 0,
+    explanation: "Сначала мотор включается вперёд, через 2 секунды выключается.",
+  },
+  {
+    id: "q2",
+    title: "Задача 2",
+    program:
+      "Начало → Ждать, пока объект ближе 10 см → Мотор выкл.",
+    options: [
+      "Робот сразу начнёт ехать вперёд",
+      "Робот остановится, когда объект подойдёт близко",
+      "Робот начнёт мигать и крутиться",
+    ],
+    correctIndex: 1,
+    explanation: "Программа ждёт сигнал датчика движения, а затем выключает мотор.",
+  },
+];
+
 const STORAGE_KEY = "wedo-build-progress-v1";
 
 const WedoPage = () => {
@@ -101,6 +130,15 @@ const WedoPage = () => {
 
   const [selectedBuild, setSelectedBuild] = useState<(typeof builds)[number] | null>(null);
   const [completedBuildIds, setCompletedBuildIds] = useState<string[]>([]);
+
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, number | null>>({
+    q1: null,
+    q2: null,
+  });
+  const [quizChecked, setQuizChecked] = useState<Record<string, boolean>>({
+    q1: false,
+    q2: false,
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -152,6 +190,38 @@ const WedoPage = () => {
         ? prev.filter((id) => id !== buildId)
         : [...prev, buildId]
     );
+  };
+
+  const setQuizAnswer = (questionId: string, optionIndex: number) => {
+    setQuizAnswers((prev) => ({
+      ...prev,
+      [questionId]: optionIndex,
+    }));
+
+    setQuizChecked((prev) => ({
+      ...prev,
+      [questionId]: false,
+    }));
+  };
+
+  const checkQuizAnswer = (questionId: string) => {
+    if (quizAnswers[questionId] === null) return;
+
+    setQuizChecked((prev) => ({
+      ...prev,
+      [questionId]: true,
+    }));
+  };
+
+  const resetQuiz = () => {
+    setQuizAnswers({
+      q1: null,
+      q2: null,
+    });
+    setQuizChecked({
+      q1: false,
+      q2: false,
+    });
   };
 
   return (
@@ -492,6 +562,111 @@ const WedoPage = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Мини-викторина */}
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+                <div>
+                  <h3 className="font-display font-bold text-foreground">
+                    Мини-викторина: что сделает робот?
+                  </h3>
+                  <p className="font-body text-muted-foreground text-sm mt-1">
+                    Выберите правильный ответ для каждой программы.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={resetQuiz}
+                  className="inline-flex items-center justify-center rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Пройти заново
+                </button>
+              </div>
+
+              <div className="space-y-5">
+                {quizQuestions.map((question) => {
+                  const selected = quizAnswers[question.id];
+                  const checked = quizChecked[question.id];
+                  const isCorrect = selected === question.correctIndex;
+
+                  return (
+                    <div
+                      key={question.id}
+                      className="rounded-xl border border-border bg-background p-4"
+                    >
+                      <h4 className="font-display font-bold text-foreground text-sm mb-2">
+                        {question.title}
+                      </h4>
+
+                      <div className="rounded-lg bg-primary/5 border border-primary/10 px-4 py-3 mb-4">
+                        <p className="font-body text-sm text-foreground leading-relaxed">
+                          {question.program}
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        {question.options.map((option, optionIndex) => {
+                          const isSelected = selected === optionIndex;
+                          const isRightOption = question.correctIndex === optionIndex;
+
+                          let optionClass =
+                            "w-full text-left rounded-lg border px-3 py-3 text-sm transition-colors ";
+
+                          if (checked && isRightOption) {
+                            optionClass += "border-primary bg-primary/10 text-foreground";
+                          } else if (checked && isSelected && !isRightOption) {
+                            optionClass += "border-destructive bg-destructive/10 text-foreground";
+                          } else if (isSelected) {
+                            optionClass += "border-primary bg-primary/5 text-foreground";
+                          } else {
+                            optionClass += "border-border hover:bg-muted text-foreground";
+                          }
+
+                          return (
+                            <button
+                              key={optionIndex}
+                              type="button"
+                              onClick={() => setQuizAnswer(question.id, optionIndex)}
+                              className={optionClass}
+                            >
+                              {option}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="mt-4 flex items-center gap-3 flex-wrap">
+                        <button
+                          type="button"
+                          onClick={() => checkQuizAnswer(question.id)}
+                          disabled={selected === null}
+                          className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                        >
+                          Проверить
+                        </button>
+
+                        {checked && (
+                          <div
+                            className={`text-sm font-medium ${
+                              isCorrect ? "text-primary" : "text-destructive"
+                            }`}
+                          >
+                            {isCorrect ? "Верно!" : "Неправильно"}
+                          </div>
+                        )}
+                      </div>
+
+                      {checked && (
+                        <p className="text-sm text-muted-foreground mt-3">
+                          {question.explanation}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
