@@ -24,8 +24,8 @@ import miloPdf from "@/pdf/milo.pdf";
 import tractionPdf from "@/pdf/traction.pdf";
 import raceCarPdf from "@/pdf/race-car.pdf";
 import fanPdf from "@/pdf/fan.pdf";
-import earthquakePdf from "@/pdf/earthquake.pdf";
-import frogPdf from "@/pdf/frog-robot.pdf";
+import heliPdf from "@/pdf/helicopter.pdf";
+import gruzPdf from "@/pdf/gruz.pdf";
 
 /* === ДАННЫЕ СБОРКИ === */
 const builds = [
@@ -50,14 +50,14 @@ const builds = [
     pdf: fanPdf,
   },
   {
-    name: "Землетрясение",
-    difficulty: "Средний",
-    pdf: earthquakePdf,
+    name: "Вертолет",
+    difficulty: "Продвинутый",
+    pdf: heliPdf,
   },
   {
-    name: "Робот-лягушка",
+    name: "Грузовик",
     difficulty: "Продвинутый",
-    pdf: frogPdf,
+    pdf: gruzPdf,
   },
 ];
 
